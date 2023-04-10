@@ -44,16 +44,19 @@ function DniScanner() {
     }
   }
 
+  const manageDataResult = (dataResult) => {
+    const parcedResult = parseDniResult(dataResult);
+    // const inputDni = document.getElementById('client-document');
+    // inputDni.value = parseDniResult(result).dni;
+    console.log('RESULT: ',parcedResult,'fmg11');
+  }
+
   useEffect(() => {
     if (result) {
-      // const inputDni = document.getElementById('client-document');
-      // inputDni.value = parseDniResult(result).dni;
-      console.log(parseDniResult(result),'fmg11')
+      manageDataResult(result);      
     }
 
-    // return () => {
-    //   second
-    // }
+
   }, [result])
 
 
