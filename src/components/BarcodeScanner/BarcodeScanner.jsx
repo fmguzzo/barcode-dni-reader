@@ -9,7 +9,8 @@ function BarcodeScanner({setIsScaning, setResult}) {
     const startDecoding = async () => {
       try {
         const videoInputDevices = await codeReader.listVideoInputDevices();
-        const deviceId = videoInputDevices[0].deviceId;
+        // android back camera = videoInputDevices[1]
+        const deviceId = videoInputDevices[1].deviceId;
         if (decodeIfNotUnmount) {
           const result = await codeReader.decodeOnceFromVideoDevice(deviceId, 'video');
           setResult(result.text);
