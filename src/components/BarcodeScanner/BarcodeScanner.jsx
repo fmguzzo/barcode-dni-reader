@@ -3,14 +3,31 @@ import { BrowserMultiFormatReader, NotFoundException } from '@zxing/library';
 
 function BarcodeScanner({setIsScaning, setResult}) {
 
+  const getDefaultVideoDevice = (devices) => {
+    const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if( devices.length === 1 || !devices[1]) {
+      return devices[0];
+    }
+  
+    if( iOS ) {
+      return devices[0];
+    } else {
+      return devices[1];
+    }
+  }
+
+  const cancelHandler = () => {
+    setIsScaning(false);
+    setResult(null);
+  }
+
   useEffect(() => {
     const codeReader = new BrowserMultiFormatReader();
     let decodeIfNotUnmount = true;
     const startDecoding = async () => {
       try {
         const videoInputDevices = await codeReader.listVideoInputDevices();
-        // android back camera = videoInputDevices[1]
-        const deviceId = videoInputDevices[1].deviceId;
+        const deviceId = getDefaultVideoDevice(videoInputDevices).deviceId;
         if (decodeIfNotUnmount) {
           const result = await codeReader.decodeOnceFromVideoDevice(deviceId, 'video');
           setResult(result.text);
@@ -30,11 +47,6 @@ function BarcodeScanner({setIsScaning, setResult}) {
     }
 
   }, [])
-
-  const cancelHandler = () => {
-    setIsScaning(false);
-    setResult(null);
-  }
 
   return (
     <div className='reader-container'>

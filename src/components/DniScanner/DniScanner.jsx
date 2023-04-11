@@ -4,6 +4,7 @@ import BarcodeScanner from '../BarcodeScanner/BarcodeScanner';
 function DniScanner() {
   const [isScaning, setIsScaning] = useState(false);
   const [result, setResult] = useState(null);
+  const [dniToShow, setDniToShow] = useState(''); // Solo para mostrar dni leido
 
   const scanHandler = () => {
     setResult(null);
@@ -48,6 +49,7 @@ function DniScanner() {
     const parcedResult = parseDniResult(dataResult);
     // const inputDni = document.getElementById('client-document');
     // inputDni.value = parseDniResult(result).dni;
+    setDniToShow(parcedResult.dni);
     console.log('RESULT: ',parcedResult,'fmg11');
   }
 
@@ -55,8 +57,6 @@ function DniScanner() {
     if (result) {
       manageDataResult(result);      
     }
-
-
   }, [result])
 
 
@@ -64,8 +64,12 @@ function DniScanner() {
     <div>
       {
         isScaning ? 
-          <BarcodeScanner setIsScaning={setIsScaning} setResult={setResult}/> : 
-          <button className='btn-dni-scanner' onClick={scanHandler}>Escanear DNI</button>
+          <BarcodeScanner setIsScaning={setIsScaning} setResult={setResult}/> : (
+            <>
+              <button className='btn-dni-scanner' onClick={scanHandler}>Escanear DNI</button>
+              <span>  DNI: {dniToShow}</span>
+            </>
+          )
       }
     </div>
   )
